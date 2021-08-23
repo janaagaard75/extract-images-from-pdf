@@ -1,0 +1,23 @@
+{
+  "name": "extract-images",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "extract": "ts-node index.ts room_design.pdf"
+  },
+  "dependencies": {
+    "pako": "^2.0.4",
+    "pdf-lib": "^0.6.1",
+    "pngjs": "^3.4.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "@types/pako": "^1.0.2",
+    "@types/pngjs": "^6.0.1",
+    "@types/rimraf": "^3.0.2"
+  }
+}
