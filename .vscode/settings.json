@@ -1,6 +1,7 @@
 {
-  "cSpell.words": [
-    "pako",
-    "pngjs"
-  ]
+  "cSpell.words": ["pako", "pngjs"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": true
 }

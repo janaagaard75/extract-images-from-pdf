@@ -1,12 +1,24 @@
 import fs from "fs";
-import rimraf from "rimraf";
-import { PNG } from "pngjs";
 import pako from "pako";
-import { PDFDocumentFactory, PDFName, PDFRawStream } from "pdf-lib";
+import {
+  PDFDocumentFactory,
+  PDFIndirectReference,
+  PDFName,
+  PDFObject,
+  PDFRawStream,
+} from "pdf-lib";
+import { PNG } from "pngjs";
+import rimraf from "rimraf";
 
 // Load the existing PDF
 const [, , originalPdfPath] = process.argv;
 const pdfDoc = PDFDocumentFactory.load(fs.readFileSync(originalPdfPath));
+
+interface Image {
+  ref: PDFIndirectReference<PDFObject>;
+  smaskRef: PDFObject;
+  colorSpace: PDFObject;
+}
 
 // Define some variables we'll use in a moment
 const imagesInDoc = [];
@@ -38,9 +50,9 @@ pdfDoc.index.index.forEach((pdfObject, ref) => {
       smaskRef,
       colorSpace,
       name: name ? name.key : `Object${objectIdx}`,
-      width: width.number,
-      height: height.number,
-      bitsPerComponent: bitsPerComponent.number,
+      width: width ? width.number : 0,
+      height: height ? height.number : 0,
+      bitsPerComponent: bitsPerComponent ? bitsPerComponent.number : 0,
       data: pdfObject.content,
       type: filter === PDFName.from("DCTDecode") ? "jpg" : "png",
     });
@@ -190,7 +202,7 @@ const savePng = (image) =>
       .pack()
       .on("data", (data) => buffer.push(...data))
       .on("end", () => resolve(Buffer.from(buffer)))
-      .on("error", (err) => reject(err)); 
+      .on("error", (err) => reject(err));
   });
 
 rimraf("./images/*.{jpg,png}", async (err) => {
